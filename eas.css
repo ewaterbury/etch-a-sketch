@@ -1,0 +1,54 @@
+body {
+    display: flex;
+    flex-direction: column;    
+    min-height: 100vh;
+}
+
+#mainContainer {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+#menuContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: brown;
+}
+
+#outerEtchContainer{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    background-color: greenyellow;
+    justify-content: center;
+    align-items: center;
+}
+
+#etchContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+    height: 75%;
+    aspect-ratio: 1/1;
+}
+
+.etchRow{
+    display: flex;
+    justify-content: stretch;
+    flex-grow: 1;
+    min-height: 0;
+    
+}
+
+.etchBox{
+background-color: green;
+flex-grow: 1;
+}
+
+.etchBoxextra{
+    width: 6.25%;
+    height: 100%;
+    aspect-ratio: 1/1;
+}
