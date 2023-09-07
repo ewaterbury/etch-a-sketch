@@ -2,6 +2,7 @@ body {
     display: flex;
     flex-direction: column;    
     min-height: 100vh;
+    background-color: darkred;
 }
 
 #mainContainer {
@@ -14,14 +15,15 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    background-color: brown;
+    max-width: 20%;
+    background-color: skyblue;
 }
 
 #outerEtchContainer{
     display: flex;
     flex-direction: column;
     flex-grow: 3;
-    background-color: greenyellow;
+    background-color: lightgray;
     justify-content: center;
     align-items: center;
 }
@@ -43,7 +45,7 @@ body {
 }
 
 .etchBox{
-background-color: green;
+
 flex-grow: 1;
 }
 
