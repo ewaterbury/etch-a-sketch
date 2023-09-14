@@ -11,19 +11,27 @@
 <div class="container" id="mainContainer">
     <div class="container" id="menuContainer">
       <ul>  
-      <li>Color Shader</li>
-      <li>Color On-Off</li>
-      <li>Eraser</li>
-      <li>Reset</li>
-      <li>Grid Size (4-64):
+        <li>Mode: Regular/Precision</li>
+        <li>Color Shader</li>
+        <li>Color On-Off</li>
+        <li>
+          <button type="button" id="random">Random</button>
+        </li>
+        <li>
+          <button type="button" id="eraser">Eraser</button>
+        </li>
+        <li>
+        <button type="button" id="resetButton">Reset Grid</button>
+        </li>
+        <li>Grid Size (4-64):
         <button type="button" id="gridSizeButton">Generate</button>
         <input type= "text" id="gridSizeInput">
-      </li>
+        </li>
       </ul>  
     </div>
     <div class="container" id="outerEtchContainer">
       <div class="container" id="etchContainer"></div>
-  </div>
+    </div>
 </div>
 </body>
 <script src="eas.js"></script>
