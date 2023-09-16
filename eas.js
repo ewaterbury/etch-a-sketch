@@ -14,38 +14,44 @@ function dragStylus(color) {
             gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = color;})
         });}
 
+//let rowCount = 0; //I want to define the rowCount variable inside the below function.
 
-        
-//Generates Initial Grid
-function generateGrid(gridSize) {
-    let rowNum = 0;
-    for(let i = 0; i < gridSize; i++){
+function generateGrid(gridSize, rowCount) {
+    ++rowCount;
+    if(rowCount !== (gridSize+1)) { //this code generates a grid on webpage.
         const etchContainer = document.getElementById("etchContainer");
         const etchRow = document.createElement('div');
-        ++rowNum;
-        etchRow.setAttribute('class', 'etchRow');
-        etchRow.setAttribute('id', `Row${rowNum}`)
-        etchContainer.appendChild(etchRow);
+            etchRow.setAttribute('class', 'etchRow');
+            etchRow.setAttribute('id', `Row${rowCount}`);
+            etchContainer.appendChild(etchRow);
         const etchBox = document.createElement('div');
-        etchBox.setAttribute('class', 'etchBox')
-        etchBox.style.backgroundColor = 'white';
+            etchBox.setAttribute('class', 'etchBox')
+            etchBox.style.backgroundColor = 'white';
         for(let i = 0; i < gridSize; i++){
-            etchRow.appendChild(etchBox.cloneNode(true));}
+            etchRow.appendChild(etchBox.cloneNode(true));
+        }
+        generateGrid(gridSize, rowCount);//this recalls the function.
+    } else {
+        dragStylus('black'); // adds a function that allows you to 'draw' on the grid then stops function by changing background color.
+        return;
     }
-    dragStylus('black');
 }
-generateGrid(16);
+        
+//generateGrid(16); //calls function when page is intiailly loaded.
 
+generateGrid(16, 0);
 //Generate New Grid Button/Text Field
 function newGrid() {
-    let input = document.getElementById("gridSizeInput").value;
+        let input = document.getElementById("gridSizeInput").value;
+        input = Number(input);
     if(input > 100 || input < 1 || isNaN(input)) {
         alert("Please enter a number between 1 and 100.");
         return;
     }
     let deleteRows = document.querySelectorAll("div.etchRow");
     deleteRows.forEach((deleteRow) => {deleteRow.remove();}) 
-    generateGrid(input);
+    //rowCount = 0;
+    generateGrid(input, 0);
     dragStylus('black');
 }
 const gridButton = document.getElementById("gridSizeButton");
@@ -53,24 +59,16 @@ gridButton.addEventListener("click", newGrid);
 
 //Reset Button
 function resetGrid() {
+    //rowCount = 0;
     let deleteRows = document.querySelectorAll("div.etchRow");
     let length = deleteRows.length;
     deleteRows.forEach((deleteRow) => {deleteRow.remove();})
-    generateGrid(length);
+    generateGrid(length, 0);
     dragStylus('black');
 }
 const resetButton = document.getElementById("resetButton");
-resetButton.addEventListener("click", resetGrid)
+resetButton.addEventListener("click", resetGrid);
 
-//Eraser button
-function eraser() {
-    removeStylus();
-    const gridBoxes = document.querySelectorAll("div.etchBox");
-    gridBoxes.forEach((gridBox) => {
-    gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = 'white';})});
-}
-const eraseButton = document.getElementById("eraser");
-eraseButton.addEventListener('click', eraser);
 
 //Random Button and SubFunctions
 // Random integer generator
@@ -102,3 +100,23 @@ function randomStylus() {
 
 const randomButton = document.getElementById("random");
 randomButton.addEventListener('click', randomStylus);
+
+
+//Eraser button
+function eraser() {
+    removeStylus();
+    const gridBoxes = document.querySelectorAll("div.etchBox");
+    gridBoxes.forEach((gridBox) => {
+    gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = 'white';})});
+}
+const eraseButton = document.getElementById("eraser");
+eraseButton.addEventListener('click', eraser);
+
+/*
+function setAttributes(element, ...atts) {
+    for (const att of atts) {
+        element.setAttribute(att);
+    }
+}
+
+setAttributes(etchRow, "'class', 'etchRow'", "id, `Row${rowCount}`");*/
