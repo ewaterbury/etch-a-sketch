@@ -1,24 +1,38 @@
-//removeStylus
-function removeStylus() {
-    const gridBoxes = document.querySelectorAll("div.etchBox");
-    gridBoxes.forEach((gridBox) => {
-        let color = `${gridBox.style.backgroundColor}`;
-        gridBox.removeEventListener('mouseenter',  () => {gridBox.style.backgroundColor = color;});
-    })
-}
 
 //Standard drawing mode
 function dragStylus(color) {
     const gridBoxes = document.querySelectorAll("div.etchBox");
-        gridBoxes.forEach((gridBox) => {
-            gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = color;})
-        });}
+    gridBoxes.forEach((gridBox) => {
+        gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = color;})
+    });
+}
 
-//let rowCount = 0; //I want to define the rowCount variable inside the below function.
+//adds a new draw function - will finish after objects update has been completed
+/*function clickStylus(color);
+    const gridBoxes = document.querySelectorAll("div.etchBox");
+    gridBoxes.forEach((gridBox) => {
+        gridBox.addEventListener('mousemove', () => {gridBox.style.backgroundColor = color;})
+    });
+*/
 
+//lets user select color from color input
+        function colorDraw() {
+    let colorInput = document.getElementById("color");    
+    let color = colorInput.value;
+    dragStylus(color);
+}
+
+//updates grid display above slider
+function updateGridDisplay() {
+    let currentVal = document.getElementById("myRange").value
+    let gridSizeDisplay = document.getElementById("gridSizeDisplay");
+    gridSizeDisplay.innerHTML = `Grid Size: ${currentVal} - ${currentVal}`;
+}
+
+//Generates Grid
 function generateGrid(gridSize, rowCount) {
     ++rowCount;
-    if(rowCount !== (gridSize+1)) { //this code generates a grid on webpage.
+    if(rowCount !== (gridSize+1)) {
         const etchContainer = document.getElementById("etchContainer");
         const etchRow = document.createElement('div');
             etchRow.setAttribute('class', 'etchRow');
@@ -30,36 +44,36 @@ function generateGrid(gridSize, rowCount) {
         for(let i = 0; i < gridSize; i++){
             etchRow.appendChild(etchBox.cloneNode(true));
         }
-        generateGrid(gridSize, rowCount);//this recalls the function.
+        generateGrid(gridSize, rowCount);
     } else {
-        dragStylus('black'); // adds a function that allows you to 'draw' on the grid then stops function by changing background color.
+        updateGridDisplay();
+        dragStylus('black');
         return;
     }
 }
-        
-//generateGrid(16); //calls function when page is intiailly loaded.
-
 generateGrid(16, 0);
+
 //Generate New Grid Button/Text Field
 function newGrid() {
-        let input = document.getElementById("gridSizeInput").value;
-        input = Number(input);
-    if(input > 100 || input < 1 || isNaN(input)) {
-        alert("Please enter a number between 1 and 100.");
-        return;
-    }
     let deleteRows = document.querySelectorAll("div.etchRow");
     deleteRows.forEach((deleteRow) => {deleteRow.remove();}) 
-    //rowCount = 0;
     generateGrid(input, 0);
     dragStylus('black');
 }
-const gridButton = document.getElementById("gridSizeButton");
-gridButton.addEventListener("click", newGrid);
+
+function gridUpdate() {
+    let sliderValue = Number(document.getElementById("myRange").value);
+    let deleteRows = document.querySelectorAll("div.etchRow");
+    deleteRows.forEach((deleteRow) => {deleteRow.remove();}) 
+    generateGrid(sliderValue, 0);
+    dragStylus('black');
+}
+
+const slider = document.querySelector("#myRange");
+slider.addEventListener('input', gridUpdate);
 
 //Reset Button
 function resetGrid() {
-    //rowCount = 0;
     let deleteRows = document.querySelectorAll("div.etchRow");
     let length = deleteRows.length;
     deleteRows.forEach((deleteRow) => {deleteRow.remove();})
@@ -84,6 +98,15 @@ function randomColor ()  {
     let colB = randomInt(0,225);
     let colC = randomInt(0,225);
     return 'rgb(' + colA + ',' + colB + ',' + colC + ')'
+}
+
+//removeStylus
+function removeStylus() {
+    const gridBoxes = document.querySelectorAll("div.etchBox");
+    gridBoxes.forEach((gridBox) => {
+        let color = `${gridBox.style.backgroundColor}`;
+        gridBox.removeEventListener('mouseenter',  () => {gridBox.style.backgroundColor = color;});
+    })
 }
 
 //Rainbow Stylus
@@ -111,6 +134,19 @@ function eraser() {
 }
 const eraseButton = document.getElementById("eraser");
 eraseButton.addEventListener('click', eraser);
+
+
+
+
+
+
+let colorInput = document.getElementById("color");
+colorInput.addEventListener("input", colorDraw);
+
+
+
+
+
 
 /*
 function setAttributes(element, ...atts) {

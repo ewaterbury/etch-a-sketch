@@ -12,8 +12,9 @@
     <div class="container" id="menuContainer">
       <ul>  
         <li>Mode: Regular/Precision</li>
-        <li>Color Shader</li>
-        <li>Color On-Off</li>
+        <li>Color:
+          <input type="color" id="color">
+        </li>
         <li>
           <button type="button" id="random">Random</button>
         </li>
@@ -23,11 +24,12 @@
         <li>
           <button type="button" id="resetButton">Reset Grid</button>
         </li>
-        <li>Grid Size (4-64):
-        <button type="button" id="gridSizeButton">Generate</button>
-        <input type= "text" id="gridSizeInput">
+        <li>
+          <div class="gridSizeContainer" id="gridSizeDisplay">
+          Grid Size: XX - XX:
+          </div> 
           <div class="sliderContainer">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            <input type="range" min="1" max="100" value="16" class="slider" id="myRange">
           </div>
         </li>
       </ul>  
