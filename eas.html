@@ -3,28 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Etch-a-Sketch</title>
+    <title>Sketch-a-Etch</title>
     <link rel= "stylesheet"href="eas.css">
   </head>
 <body>
-<h1>Etch-a-Sketch</h1>
-<div class="container" id="mainContainer">
+  <header class="header" id="mainHeader">
+    <h1>Sketch-a-Etch</h1>
+  </header>
+  <div class="container" id="mainContainer">
     <div class="container" id="menuContainer">
-      <ul>  
-        <li>Mode: Regular/Precision</li>
-        <li>Color:
-          <input type="color" id="color">
+      <ul class="sidebar" id="etchSidebar">
+        <li class="sidebarItem">
+          <button type="button" id="drawModeButton">Drawmode</button>
+          <div class="container" id="drawModeContainer">
+            <div class="drawModeContainerChild" id="classic">Classic</div>
+            <div class="drawModeContainerChild" id="precision">Precision</div>
+          </div>
         </li>
-        <li>
-          <button type="button" id="random">Random</button>
+        <li class="sidebarItem">
+          Color: 
+          <input type="color" id="myColor">
         </li>
-        <li>
-          <button type="button" id="eraser">Eraser</button>
+        <li class="sidebarItem">
+          <button type="button" class="sidebarButton" id="random">Random</button>
         </li>
-        <li>
-          <button type="button" id="resetButton">Reset Grid</button>
+        <li class="sidebarItem">
+          <button type="button" class="sidebarButton" id="eraser">Eraser</button>
         </li>
-        <li>
+        <li class="sidebarItem">
+          <button type="button" class="sidebarButton" id="resetButton">Reset Grid</button>
+        </li>
+        <li class="sidebarItem">
           <div class="gridSizeContainer" id="gridSizeDisplay">
           Grid Size: XX - XX:
           </div> 
@@ -37,7 +46,7 @@
     <div class="container" id="outerEtchContainer">
       <div class="container" id="etchContainer"></div>
     </div>
-</div>
+  </div>
 </body>
 <script src="eas.js"></script>
 </html>
