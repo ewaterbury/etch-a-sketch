@@ -1,3 +1,11 @@
+function toDoList(...toDos){
+    for(toDo of toDos) {
+        alert(toDo);
+    }
+}
+
+toDoList("add styling functionality", "revise mouseout listener", "allow user to switch between color and random");
+
 //Main Object for Webpage
 const etch = {
 
@@ -21,109 +29,166 @@ const etch = {
                 this.generateGrid(gridSize, rowCount);
             } else {
                 this.updateGridDisplay();
-                const drawModeButton = document.getElementById("drawModeButton");
-                if (drawModeButton.hasAttribute("percision")) {
-                    etch.draw.percisionStylus('black');
-                } else {
-                    etch.draw.dragStylus('black');
-                }
                 return;
             }
         },
 
         //Resets Grid - Called by Reset Grid Button
         resetGrid() {
+            const gridBox = document.querySelector("div.etchBox");
+            let color = gridBox.dataset.color;
             let deleteRows = document.querySelectorAll("div.etchRow");
             let length = deleteRows.length;
             deleteRows.forEach((deleteRow) => {deleteRow.remove();})
             etch.grid.generateGrid(length, 0);
-            etch.draw.dragStylus('black');
+            etch.draw.addStylus(color);
         },
 
         //Updates Slider Display from Slider Input
         updateGridDisplay() {
-            let currentVal = document.getElementById("myRange").value
+            let value = document.getElementById("myRange").value
             let gridSizeDisplay = document.getElementById("gridSizeDisplay");
-            gridSizeDisplay.innerHTML = `Grid Size: ${currentVal} x ${currentVal}`;
+            gridSizeDisplay.innerHTML = `Grid Size: ${value} x ${value}`;
         },
 
-        //Updates Grid from Slider Input
+        //Updates Grid from Slider Input and a Helper function for generateGrid
         gridUpdate() {
-            let sliderValue = Number(document.getElementById("myRange").value);
+            let sliderInput = Number(document.getElementById("myRange").value);
             let deleteRows = document.querySelectorAll("div.etchRow");
-            deleteRows.forEach((deleteRow) => {deleteRow.remove();}) 
-            etch.grid.generateGrid(sliderValue, 0);
-            etch.draw.dragStylus('black');
+            const gridBox = document.querySelector("div.etchBox");
+            let color = gridBox.dataset.color;
+            deleteRows.forEach((deleteRow) => {
+                deleteRow.remove();
+            }) 
+            etch.grid.generateGrid(sliderInput, 0);
+            etch.draw.addStylus(color);
+        },
+
+        initialGrid(gridSize = 16, rowCount = 0) {
+            let color = 'black';
+            etch.grid.generateGrid(gridSize, rowCount);
+            etch.draw.addStylus(color);
         },
 
     },
 
     //Functions that Impact Drawing
     draw: {
-
-        //Standard drawing mode
-        dragStylus(color) {
-            etch.draw.removeStylus();
-            const drawModeButton = document.getElementById("drawModeButton");
-            drawModeButton.setAttribute("name", "drag");
-            console.log(drawModeButton);
-            const gridBoxes = document.querySelectorAll("div.etchBox");
-            gridBoxes.forEach((gridBox) => {
-                gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = color;
-                });
-            });
-        },
         
-        //Percision drawing mode - called by drawmode button
-        percisionStylus(color){
-            etch.draw.removeStylus();
+        addStylus(color) {
+            etch.draw.colorAssign(color);
             const drawModeButton = document.getElementById("drawModeButton");
-            const drawField = document.getElementById("outerEtchContainer");
-            drawModeButton.setAttribute("name", "percision");
-            let mouseDown = 0;
-            console.log(drawModeButton);
-            drawField.onmousedown = function() {
-                mouseDown = true;
-                console.log(mouseDown);
-            }
-            drawField.onmouseup = function() {
-                mouseDown = false;
-                console.log(mouseDown);
-            }
             const gridBoxes = document.querySelectorAll("div.etchBox");
-            gridBoxes.forEach((gridBox) => {
-                gridBox.addEventListener('mouseover',() => {
-                    if(mouseDown === true) {
-                        console.log(mouseDown);
-                        gridBox.style.backgroundColor = color;
-                    };
+            if(drawModeButton.getAttribute("name") === "percision") {
+                gridBoxes.forEach((gridBox) => {
+                    gridBox.addEventListener('mouseenter', etch.draw.percisionStylus);
                 });
-            });
+            } else {
+                drawModeButton.setAttribute("name", "drag");
+                gridBoxes.forEach((gridBox) => {
+                    gridBox.addEventListener('mouseenter', etch.draw.dragStylus);
+                });
+            }
         },
 
-
-        //Removes Stylus - helper function
+        //Removes Stylus Event Listener
         removeStylus() {
             const gridBoxes = document.querySelectorAll("div.etchBox");
+            const drawModeButton = document.getElementById("drawModeButton");
+            if(drawModeButton.getAttribute("name") === "percision") {
+                gridBoxes.forEach((gridBox) => {
+                    gridBox.removeEventListener('mouseover', etch.draw.percisionStylus)
+                });
+            } else {
+                gridBoxes.forEach((gridBox) => {
+                    gridBox.removeEventListener('mouseenter', etch.draw.dragStylus)
+                });
+            };
+        },
+
+        colorAssign(color){
+            const gridBoxes = document.querySelectorAll("div.etchBox");
             gridBoxes.forEach((gridBox) => {
-                let color = `${gridBox.style.backgroundColor}`;
-                gridBox.removeEventListener('mouseenter',  () => {gridBox.style.backgroundColor = color;});
-            })
+                gridBox.dataset.color = color;
+            });
+
+        },
+        
+        dragStylus(){
+            const eraseButton = document.getElementById("eraser");
+            const randomButton = document.getElementById("random");
+            if(eraseButton.getAttribute("name") === "on"){
+                this.style.backgroundColor = "white";
+            } else if(randomButton.getAttribute("name") === "on"){
+                let randomColor = etch.draw.random.randomColor();
+                this.style.backgroundColor = randomColor;
+            } else {
+                this.style.backgroundColor = this.dataset.color;}
+        },
+
+        percisionStylus(){
+            const drawField = document.getElementById("outerEtchContainer");
+            const eraseButton = document.getElementById("eraser");
+            const randomButton = document.getElementById("random");
+            drawField.onmousedown = function() {
+                drawField.dataset.mouse = "mouseDown";
+                console.log(drawField);
+            }
+            drawField.onmouseup = function() {
+                drawField.dataset.mouse = "mouseUp";
+                console.log(drawField);
+            }
+            /*drawField.onmouseout = function() {
+                drawField.dataset.mouse = "mouseOut";
+                console.log(drawField);
+            }*/
+            if(drawField.getAttribute("mouse") == "mouseDown" && eraseButton.getAttribute("name") === "on") {   
+                this.style.backgroundColor = "white";
+            } else if(drawField.getAttribute("mouse") == "mouseDown" && randomButton.getAttribute("name") === "on") {
+                let randomColor = etch.draw.random.randomColor();
+                this.style.backgroundColor = randomColor;;
+            } else if(drawField.dataset.mouse === "mouseDown") {
+                this.style.backgroundColor = this.dataset.color;
+            }
+        },
+        
+
+        updateDrawmode() {
+            const drawModeButton = document.getElementById("drawModeButton");
+            const randomButton = document.getElementById("random");
+            const gridBox = document.querySelector("div.etchBox");
+            let color = gridBox.dataset.color;
+            etch.draw.removeStylus();
+            if (drawModeButton.getAttribute("name") === "percision") {
+                //This will hold random
+                if (randomButton.getAttribute("name") === "on"){
+
+                } else {
+                //new code ends here
+                    drawModeButton.setAttribute("name", "drag");
+                    etch.draw.addStylus(color);
+                }
+            } else if (drawModeButton.getAttribute("name") === "drag") {
+                drawModeButton.setAttribute("name", "percision");
+                etch.draw.addStylus(color);
+            }
         },
 
         //lets user select color from color input
         colorDraw() {
             let colorInput = document.getElementById("myColor");    
             let color = colorInput.value;
-            etch.draw.dragStylus(color);
+            etch.draw.addStylus(color);
         },
 
         //Eraser button
         eraser() {
-            etch.draw.removeStylus();
-            const gridBoxes = document.querySelectorAll("div.etchBox");
-            gridBoxes.forEach((gridBox) => {
-            gridBox.addEventListener('mouseenter', () => {gridBox.style.backgroundColor = 'white';})});
+            const eraseButton = document.getElementById("eraser");
+            if(eraseButton.getAttribute("name") === "on") {
+                eraseButton.setAttribute("name", "off")
+            } else {
+                eraseButton.setAttribute("name", "on");
+            }
         },
 
         random: {
@@ -143,34 +208,36 @@ const etch = {
                 return 'rgb(' + colA + ',' + colB + ',' + colC + ')'
             },
 
-            //Rainbow Stylus
+            //Random Stylus
             randomStylus() {
-                etch.draw.removeStylus();
-                const gridBoxes = document.querySelectorAll("div.etchBox");
-                gridBoxes.forEach((gridBox) => {
-                    gridBox.addEventListener('mouseenter', () => {
-                        let color = etch.draw.random.randomColor();
-                        gridBox.style.backgroundColor = color;
-                    });
-                });
+                
+            },
+
+            randomOn() {
+                const randomButton = document.getElementById("random");
+                if(randomButton.getAttribute("name") === "on") {
+                    randomButton.setAttribute("name", "off")
+                } else {
+                    randomButton.setAttribute("name", "on");
+                }
             },
         },
     },
 }
 
-function initial() {
+
 
     //Event Listener For Drawmode
     const drawModeButton = document.getElementById("drawModeButton");
-    drawModeButton.addEventListener('click', etch.draw.percisionStylus);
+    drawModeButton.addEventListener('click', etch.draw.updateDrawmode);
 
     //Event Listener For Color Drawing
-    let colorInput = document.getElementById("myColor");
+    const colorInput = document.getElementById("myColor");
     colorInput.addEventListener("input", etch.draw.colorDraw);
 
     //Event Listener For Random Stylus
     const randomButton = document.getElementById("random");
-    randomButton.addEventListener('click', etch.draw.random.randomStylus);
+    randomButton.addEventListener('click', etch.draw.random.randomOn);
 
     //Event Listener for Eraser Button
     const eraseButton = document.getElementById("eraser");
@@ -185,16 +252,4 @@ function initial() {
     slider.addEventListener('input', etch.grid.gridUpdate);
 
     //Calls Initial 16x16 Grid Generation
-    etch.grid.generateGrid(16, 0);
-}
-
-initial();
-
-/*
-function setAttributes(element, ...atts) {
-    for (const att of atts) {
-        element.setAttribute(att);
-    }
-}
-
-setAttributes(etchRow, "'class', 'etchRow'", "id, `Row${rowCount}`");*/
+    etch.grid.initialGrid();
