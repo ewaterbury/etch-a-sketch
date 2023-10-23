@@ -12,38 +12,48 @@
   </header>
   <div class="container" id="mainContainer">
     <div class="container" id="menuContainer">
+      
       <ul class="sidebar" id="etchSidebar">
-        <li class="sidebarItem">
-          <button type="button" id="drawModeButton">Drawmode</button>
-          <div class="container" id="drawModeContainer">
-            <div class="drawModeContainerChild" id="classic">Classic</div>
-            <div class="drawModeContainerChild" id="precision">Precision</div>
-          </div>
+        <li class="sidebarItem" id="sidebarDraw">
+          
+          <button type="button" class="modeButton" id="drawModeButton">Drawmode</button>
+          <div class="drawModeChild" id="classic">Classic</div>
+          <div class="drawModeChild" id="precision">Precision</div>
+        
         </li>
-        <li class="sidebarItem">
-          Color: 
+        <li class="sidebarItem" id="sidebarColor">
+          
+          <button type="button" class="styleButton" id="colorButton">Color</button>
           <input type="color" id="myColor">
+
         </li>
-        <li class="sidebarItem">
-          <button type="button" class="sidebarButton" id="random">Random</button>
+        <li class="sidebarItem" id="sidebarRandom">
+          
+          <button type="button" class="styleButton" id="randomButton">Random</button>
+        
         </li>
-        <li class="sidebarItem">
-          <button type="button" class="sidebarButton" id="eraser">Eraser</button>
+        <li class="sidebarItem" id="sidebarEraser">
+          
+          <button type="button" class="styleButton" id="eraserButton">Eraser</button>
+        
         </li>
-        <li class="sidebarItem">
-          <button type="button" class="sidebarButton" id="resetButton">Reset Grid</button>
+        <li class="sidebarItem" id="sidebarReset">
+          
+          <button type="button" class="gridButton" id="resetButton">Reset</button>
+        
         </li>
-        <li class="sidebarItem">
-          <div class="gridSizeContainer" id="gridSizeDisplay">
-          Grid Size: XX - XX:
-          </div> 
+        <li class="sidebarItem" id="sidebarGrid">
+          
+          <div class="gridSizeContainer" id="gridSizeDisplay">Grid Size: XX x XX:</div> 
           <div class="sliderContainer">
             <input type="range" min="1" max="100" value="16" class="slider" id="myRange">
           </div>
+
         </li>
-      </ul>  
+      </ul>
+
     </div>
-    <div class="container" id="outerEtchContainer">
+    <div class="container" id="contentContainer">
       <div class="container" id="etchContainer"></div>
     </div>
   </div>

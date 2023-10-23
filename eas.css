@@ -4,11 +4,13 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: #353535;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
   header {
     color: white;
     background-color: #284b63;
+    border-bottom: 3px solid #353535 ;
   }
 
   #mainContainer {
@@ -24,6 +26,7 @@ body {
         flex-grow: 1;
         max-width: 20%;
         background-color: cadetblue;
+        border-right: 3px solid #353535 ;
     }
 
     .sidebar {
@@ -35,12 +38,17 @@ body {
     }
 
       .sidebarItem {
+        /*Display*/
+        display: flex;
+        justify-content: space-between;
         /*Color*/
         background-color: white;
         color: black;
-        /*Border*/
-        border: 5% solid black;
+        /*Border, Margin, Padding*/
+        border: 1.5px solid #353535;
+        padding: 2px;
       }
+
         
       .sidebarButton {
           background-color: transparent;
@@ -75,7 +83,7 @@ body {
 
 
 
-#outerEtchContainer{
+#contentContainer{
     display: flex;
     flex-direction: column;
     flex-grow: 3;
@@ -89,6 +97,7 @@ body {
     background-color: aqua;
     height: 75%;
     aspect-ratio: 1/1;
+    border: 3px solid #353535;
 }
 
 .etchRow{
@@ -102,6 +111,7 @@ body {
 .etchBox{
 flex-grow: 1;
 min-height: 1px;
+border: 1px solid white;
 }
 
 .etchBoxextra{
