@@ -3,10 +3,9 @@ function toDoList(...toDos){
         alert(toDo);
     }
 }
-//toDoList("add styling functionality to buttons", "add semenatic HTMLtags","add promise", "optimize code", "make it look fancy-er");
+//toDoList("add styling functionality to buttons","add semenatic HTMLtags","add promise", "optimize code", "make it look fancy-er");
 
 const etch = {
-
     grid: {
         //Generates etch grid
         generateGrid (gridSize, rowCount) {
@@ -14,22 +13,22 @@ const etch = {
             if(rowCount !== (gridSize+1)) {
                 const etchContainer = document.getElementById("etchContainer");
                 const etchRow = document.createElement('div');
-                    etchRow.setAttribute('class', 'etchRow');
-                    etchRow.setAttribute('id', `Row${rowCount}`);
-                    etchContainer.appendChild(etchRow);
+                etchRow.setAttribute('class', 'etchRow');
+                etchRow.setAttribute('id', `Row${rowCount}`);
+                etchContainer.appendChild(etchRow);
                 const etchBox = document.createElement('div');
-                    etchBox.setAttribute('class', 'etchBox')
-                    etchBox.style.backgroundColor = 'white';
+                etchBox.setAttribute('class', 'etchBox')
+                etchBox.style.backgroundColor = 'white';
                 for(let i = 0; i < gridSize; i++) {
                     etchRow.appendChild(etchBox.cloneNode(true));
                 }
                 this.generateGrid(gridSize, rowCount);
             } else {
-                this.updateGridDisplay();//if shit gets weird add back return;
+                this.updateGridDisplay();
             }
         },
 
-        //Updates slider display from slider input
+        //Updates slider display from slider input - Called w/ generateGrid
         updateGridDisplay() {
             let value = document.getElementById("myRange").value
             let gridSizeDisplay = document.getElementById("gridSizeDisplay");
@@ -64,10 +63,10 @@ const etch = {
         initialGrid(gridSize = 16, rowCount = 0) {
             let color = 'black';
             etch.grid.generateGrid(gridSize, rowCount);
+            etch.buttons.buttonOn();
             etch.draw.addStylus(color);
-            etch.buttons.colorOn();
+            etch.buttons.drawmodeButtonOn();
         },
-
     },
 
     //Functions that Impact Drawing
@@ -115,10 +114,10 @@ const etch = {
             const colorButton = document.getElementById("colorButton");
             const randomButton = document.getElementById("randomButton");
             const eraseButton = document.getElementById("eraserButton");
-            drawField.onmousedown = function() {
+            drawField.onmousedown = function(e) {
                 drawField.dataset.mouse = "mouseDown";
             }
-            drawField.onmouseup = function() {
+            drawField.onmouseup = function(e) {
                 drawField.dataset.mouse = "mouseUp";
             }
             drawField.addEventListener('mouseleave', (e) => {
@@ -146,6 +145,7 @@ const etch = {
                 drawModeButton.dataset.status = "percision";
                 etch.draw.addStylus(color);
             }
+            etch.buttons.drawmodeButtonOn();
         },
 
         //Removes Stylus Event Listeners - Helper Function for UpdateDrawmode()
@@ -172,21 +172,20 @@ const etch = {
 
 
     buttons: {
-        colorOn() {
-            const colorButton = document.getElementById("colorButton");
-            etch.buttons.otherButtonsOff(colorButton);
-        },
-
-        //RandomButton
-        randomOn() {
-            const randomButton = document.getElementById("randomButton");
-            etch.buttons.otherButtonsOff(randomButton);
-        },
-
-        //Eraser button
-        eraserOn() {
-            const eraseButton = document.getElementById("eraserButton");
-            etch.buttons.otherButtonsOff(eraseButton);
+        //turns on selected style button
+        buttonOn(initial = 'color') {
+            if(this.id === undefined){
+                const initialButton = document.getElementById(`${initial}Button`)
+                initialButton.parentNode.className = "sidebarItemOn";
+                etch.buttons.otherButtonsOff(initialButton);
+            } else {
+                const getButton = document.getElementById(this.id);
+                const getList = document.getElementById(this.parentNode.id);
+                const turnOff = document.querySelector(".sidebarItemOn")
+                turnOff.setAttribute("class", "sidebarItem");
+                etch.buttons.otherButtonsOff(getButton);
+                getList.className = "sidebarItemOn";
+            }
         },
 
         //Helper to turn off non-selected style buttons
@@ -194,14 +193,28 @@ const etch = {
             styleButtons = document.querySelectorAll(".styleButton");
             styleButtons.forEach((styleButton) => {
                 styleButton.dataset.status =  "off";
+                
             });
             currentButton.dataset.status =  "on";
         },
+
+        drawmodeButtonOn(initial = 'classic'){//working in this function, its not quite ready
+                const classic = document.getElementById('classic');
+                const precision = document.getElementById('precision');
+                if(classic.className === "drawModeChild" && precision.className === "drawModeChild") {
+                    document.getElementById(`${initial}`).className = "drawModeChildOn"
+                } else {
+                    const turnOn = document.querySelector(".drawModeChild");
+                    const turnOff = document.querySelector(".drawModeChildOn");
+                    turnOn.className = "drawModeChildOn"
+                    turnOff.className = "drawModeChild"
+                }
+        },
+        
     },
 
-
     random: {
-            // Random integer generator
+        // Random integer generator
         randomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -255,15 +268,15 @@ const etch = {
     
     //Event Listener to turn color button on
     const colorButton = document.getElementById("colorButton")
-    colorButton.addEventListener('click', etch.buttons.colorOn)
+    colorButton.addEventListener('click', etch.buttons.buttonOn)
 
     //Event Listener to turn random button on
     const randomButton = document.getElementById("randomButton");
-    randomButton.addEventListener('click', etch.buttons.randomOn);
+    randomButton.addEventListener('click', etch.buttons.buttonOn);
 
     //Event Listener to turn eraser button on
     const eraseButton = document.getElementById("eraserButton");
-    eraseButton.addEventListener('click', etch.buttons.eraserOn);
+    eraseButton.addEventListener('click', etch.buttons.buttonOn);
 
     //Event Listener to reset grid
     const resetButton = document.getElementById("resetButton");
@@ -275,5 +288,3 @@ const etch = {
 
     //Calls Initial 16x16 Grid Generation
     etch.grid.initialGrid();
-
-

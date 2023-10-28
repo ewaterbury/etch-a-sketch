@@ -42,11 +42,23 @@ body {
         display: flex;
         justify-content: space-between;
         /*Color*/
-        background-color: white;
+        background-color: #eaeaea;
         color: black;
         /*Border, Margin, Padding*/
-        border: 1.5px solid #353535;
+        border: 1px solid #353535;
         padding: 2px;
+      }
+
+      .sidebarItemOn {
+        /*Display*/
+        display: flex;
+        justify-content: space-between;
+        /*Color*/
+        background-color: #eaeaea;
+        color: black;
+        /*Border, Margin, Padding*/
+        border: 2px solid #dd6e42;
+        padding: 1px;
       }
 
         
@@ -56,12 +68,23 @@ body {
         flex-direction: column;
         width: 100%;
         }
-       
+
         #drawModeContainer {
           display: flex;
           justify-content: space-around;
         }
         
+        .drawModeChild {
+          border: 2px solid #eaeaea;
+          padding: 3px;
+        }
+
+        .drawModeChildOn {
+          border: 2px solid #dd6e42;
+          padding: 3px;
+        }
+
+
         #myColor {
           border: none;
         }
@@ -94,7 +117,7 @@ body {
 #etchContainer{
     display: flex;
     flex-direction: column;
-    background-color: aqua;
+    background-color: white;
     height: 75%;
     aspect-ratio: 1/1;
     border: 3px solid #353535;
@@ -112,6 +135,7 @@ body {
 flex-grow: 1;
 min-height: 1px;
 border: 1px solid white;
+border-radius: 3px;
 }
 
 .etchBoxextra{
